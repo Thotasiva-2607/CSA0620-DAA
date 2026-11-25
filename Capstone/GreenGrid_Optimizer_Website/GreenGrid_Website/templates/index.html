@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GreenGrid Optimizer</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand-mark">GG</div>
+  <div><h1>GreenGrid Optimizer</h1><p>Renewable Energy Distribution Planning</p></div>
+  <span class="local-tag">LOCAL PROJECT</span>
+</header>
+
+<main class="container">
+  <section class="intro">
+    <div>
+      <p class="eyebrow">DAA CAPSTONE PROJECT</p>
+      <h2>Optimize your renewable energy network</h2>
+      <p class="muted">Add energy locations, run minimum spanning tree algorithms, and compare network results.</p>
+    </div>
+    <button class="primary" id="loadSample">Load sample data</button>
+  </section>
+
+  <section class="layout">
+    <div class="panel">
+      <div class="panel-heading"><div><h3>Energy locations</h3><p class="muted small">Add sites manually or click on the map.</p></div><span class="count" id="locationCount">0 locations</span></div>
+      <form id="nodeForm" class="form-grid">
+        <label>Location name<input id="nodeName" required placeholder="e.g. Solar Farm A"></label>
+        <label>Location type<select id="nodeType"><option>Solar</option><option>Wind</option><option>Substation</option><option>Distribution</option></select></label>
+        <label>Latitude<input id="nodeLat" type="number" step="any" required placeholder="13.0827"></label>
+        <label>Longitude<input id="nodeLon" type="number" step="any" required placeholder="80.2707"></label>
+        <button class="primary full" type="submit">Add location</button>
+      </form>
+      <div class="list-heading"><strong>Location list</strong><button class="text-button" id="clearNodes">Clear all</button></div>
+      <div id="nodeList" class="node-list"></div>
+    </div>
+
+    <div class="panel map-panel">
+      <div class="panel-heading"><div><h3>Location map</h3><p class="muted small">Click anywhere on the map to add a distribution point.</p></div></div>
+      <div id="map"></div>
+      <p class="hint">Map tiles require an internet connection. You can also enter coordinates manually.</p>
+    </div>
+  </section>
+
+  <section class="panel settings-panel">
+    <div class="panel-heading"><div><h3>Optimization settings</h3><p class="muted small">The same weighted graph is used for each algorithm.</p></div></div>
+    <div class="settings-grid">
+      <label>Installation cost per km (₹)<input id="costRate" type="number" min="0" step="any" value="120000"></label>
+      <label>Illustrative loss per km (%)<input id="lossRate" type="number" min="0" step="any" value="0.25"></label>
+      <label>Algorithm<select id="algorithm"><option>Compare all</option><option>Kruskal</option><option>Prim</option><option>Boruvka</option></select></label>
+      <button class="primary run-button" id="optimizeBtn">Run optimization</button>
+    </div>
+    <div id="status" class="status" aria-live="polite">Ready. Load sample data or add at least two locations.</div>
+  </section>
+
+  <section id="resultsSection" class="hidden">
+    <div class="section-title"><div><p class="eyebrow">ANALYSIS</p><h2>Optimization results</h2></div></div>
+    <div id="metricCards" class="metric-grid"></div>
+    <div class="results-layout">
+      <div class="panel">
+        <div class="panel-heading"><div><h3>Network graph</h3><p class="muted small">Green lines are selected MST connections; grey lines are other possible links.</p></div></div>
+        <div id="networkGraph"></div>
+        <div class="legend"><span><i class="green-dot"></i> Selected MST edge</span><span><i class="grey-dot"></i> Other possible edge</span></div>
+      </div>
+      <div class="panel">
+        <div class="panel-heading"><div><h3>Algorithm comparison</h3><p class="muted small">Measured runtime for this run.</p></div></div>
+        <div id="runtimeChart" class="bar-chart"></div>
+        <div id="comparisonTable"></div>
+      </div>
+    </div>
+    <p class="disclaimer" id="modelNote"></p>
+  </section>
+  <footer>GreenGrid Optimizer · Academic prototype for Design and Analysis of Algorithms</footer>
+</main>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
